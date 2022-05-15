@@ -26,7 +26,7 @@ async def get_note(id: str):
     note = notes_serialize(collection_name.find({"_id": ObjectId(id)}))
     return {"success": True, "data": note}
 
-@note_api_router.get("/{user}")
+@note_api_router.get("/user/{user}")
 async def get_note(user: str):
     note = notes_serialize(collection_name.find({"user":user}))
     return {"success": True, "data": note}
@@ -55,12 +55,14 @@ async def put_note(id: str, note: Note):
 
 #delete
 @note_api_router.delete("/{id}")
-async def delete_note(id: str, note: Note):
-    collection_name.find_one_and_update({"_id": ObjectId(id)})
+async def delete_note(id: str):
+    collection_name.find_one_and_delete({"_id": ObjectId(id)})
     return {"success": True, "data": []}
 
 #find regex
-@note_api_router.get("/find/{keywords}")
+@note_api_router.get("/find/{keywords}",    
+    summary="Find notes by keywords",
+    description="Find notes by multiple word(s) using regex regardless of position")
 #async def find_note(keywords: str | None = Query(None, description="My description")):
 async def find_note(keywords: Union[str, None] = Query(Default=None,
         title="Query string",
