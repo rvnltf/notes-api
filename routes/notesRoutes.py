@@ -18,7 +18,7 @@ async def get_note(id: str):
     note = notes_serialize(collection_name.find({"_id": ObjectId(id)}))
     return {"success": True, "data": note}
 
-@note_api_router.get("/{user}")
+@note_api_router.get("/user/{user}")
 async def get_note(user: str):
     note = notes_serialize(collection_name.find({"user":user}))
     return {"success": True, "data": note}
@@ -47,6 +47,6 @@ async def put_note(id: str, note: Note):
 
 #delete
 @note_api_router.delete("/{id}")
-async def delete_note(id: str, note: Note):
-    collection_name.find_one_and_update({"_id": ObjectId(id)})
+async def delete_note(id: str):
+    collection_name.find_one_and_delete({"_id": ObjectId(id)})
     return {"success": True, "data": []}
