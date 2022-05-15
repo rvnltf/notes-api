@@ -1,6 +1,7 @@
 import datetime
 from typing import Union
 from fastapi import APIRouter, Query
+from fastapi.responses import RedirectResponse
 from config.database import collection_name
 from models.notesModel import Note
 from schemas.notesSchema import note_serialize, notes_serialize
@@ -8,6 +9,11 @@ from bson import ObjectId
 import re
 
 note_api_router = APIRouter()
+
+#redirect root path to docs
+@note_api_router.get("/")
+async def docs_redirect():
+    return RedirectResponse(url='/docs')
 
 #retrieve
 @note_api_router.get("/")
@@ -49,8 +55,8 @@ async def put_note(id: str, note: Note):
 
 #delete
 @note_api_router.delete("/{id}")
-async def delete_note(id: str):
-    collection_name.deleteOne({"_id": ObjectId(id)})
+async def delete_note(id: str, note: Note):
+    collection_name.find_one_and_update({"_id": ObjectId(id)})
     return {"success": True, "data": []}
 
 #find regex
