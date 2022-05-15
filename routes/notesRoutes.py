@@ -64,9 +64,7 @@ async def delete_note(id: str):
     summary="Find notes by keywords",
     description="Find notes by multiple word(s) using regex regardless of position")
 #async def find_note(keywords: str | None = Query(None, description="My description")):
-async def find_note(keywords: Union[str, None] = Query(Default=None,
-        title="Query string",
-        description="Query string for the items to search in the database that have a good match")):
+async def find_note(keywords: str):
     #print(keywords)
 
     strs = keywords.split()
