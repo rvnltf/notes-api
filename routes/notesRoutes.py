@@ -1,9 +1,11 @@
 import datetime
-from fastapi import APIRouter
+from typing import Union
+from fastapi import APIRouter, Query
 from config.database import collection_name
 from models.notesModel import Note
 from schemas.notesSchema import note_serialize, notes_serialize
 from bson import ObjectId
+import re
 
 note_api_router = APIRouter()
 
@@ -47,6 +49,33 @@ async def put_note(id: str, note: Note):
 
 #delete
 @note_api_router.delete("/{id}")
-async def delete_note(id: str, note: Note):
-    collection_name.find_one_and_update({"_id": ObjectId(id)})
+async def delete_note(id: str):
+    collection_name.deleteOne({"_id": ObjectId(id)})
     return {"success": True, "data": []}
+
+#find regex
+@note_api_router.get("/find/{keywords}")
+#async def find_note(keywords: str | None = Query(None, description="My description")):
+async def find_note(keywords: Union[str, None] = Query(Default=None,
+        title="Query string",
+        description="Query string for the items to search in the database that have a good match")):
+    #print(keywords)
+
+    strs = keywords.split()
+    prefix = "^"
+    suffix = ".*$"
+    #print(strs)
+
+    search_key = prefix
+    for x in strs:
+        search_key += "(?=.*\\b" + x + "\\b)"
+        #search_key += "(?=.*" + x + ")"
+        #print(x)
+    search_key += suffix
+    #print(search_key)
+
+    regx = re.compile(search_key, re.IGNORECASE)
+    notes = notes_serialize(collection_name.find({"text": regx}))
+    #print(note) 
+
+    return {"success": True, "data": notes}
