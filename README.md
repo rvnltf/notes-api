@@ -20,6 +20,6 @@ start the server
 ```sh
 uvicorn main:app
 ```
-Verify the deployment by navigating to your server address in your preferred browser [127.0.0.1:8000/docs](127.0.0.1:8000/docs)
+Verify the deployment by navigating to your server address in your preferred browser [127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ### Let's code...
