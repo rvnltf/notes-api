@@ -11,13 +11,15 @@ This is a simple rest api application using python.
 
 ## Installation
 Notes API require [Python](https://www.python.org/) v3.10 or later.
+
 Install the library
 ```sh
 pip install fastapi uvicorn pymongo[srv]
 ```
-and start the server
+start the server
 ```sh
 uvicorn main:app
 ```
+Verify the deployment by navigating to your server address in your preferred browser [127.0.0.1:8000/docs]
 
-## Enjot it...
+## Let's code...
