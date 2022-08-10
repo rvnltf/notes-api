@@ -1,2 +1,5 @@
+3.6.5
+python == 3.8
+pip == 22.2.2
 pip install fastapi uvicorn pymongo[srv]
 uvicorn main:app
